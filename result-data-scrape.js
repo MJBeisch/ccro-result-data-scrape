@@ -1,18 +1,26 @@
-var Airtabpe = '',
+var Airtable = '',
     base = '',
+    CCROairtableAPIkey = window.localStorage.getItem('CCROairtableAPIkey'),
+    CCROairtableBaseID = window.localStorage.getItem('CCROairtableBaseID'),
     experimentName = $('.clabel').text().trim(),
     resultData = {};
 
-$.getScript('https://corvuscro.com/js/airtable.browser.js', function() {
+$.getScript('https://mjbeisch.github.io/ccro-result-data-scrape/airtable.browser.js', function() {
     Airtable = require('airtable');
 
-    // Get a base ID for an instance of art gallery example
-    base = new Airtable({ apiKey: 'key5WBhqQSRktruAN' }).base('appHkfe62pDp6fL0j');
+    //Build the CCRO Overlay UI frame - temporary placeholder grabbed from CCROoverlay
+    $('head').append('<link rel="stylesheet" type="text/css" href="https://mjbeisch.github.io/ccro-bookmarklet/CCRObookmarklet.min.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">');
+    $("body").append('<div class="CCROoverlayui"><div class="CCROoverlayOptions"></div><div class="CCROoverlayuiscroll"><div class="CCROoverlayuicontent"></div></div><div class="CCROv-header"><div class="CCROv-ui-buttons"><button class="CCROv-close CCROv-button"><i class="fas fa-times"></i></button></div><h2>Corvus CRO Experiment Overlay</h2></div></div>');
 
-    CCROrenderScraper();
+    if( !CCROairtableAPIkey || !CCROairtableBaseID ) {
+        CCROrenderAirtableInitialize();
+    }
+
+    else {
+        CCROrenderScraper();
+    }
 });
     
-
 //Get the Airtable record ID matching the experiment name
 function uploadResultData() {
     var experimentNameFilter = '{Experiment Name} = "'+ experimentName +'"',
@@ -112,17 +120,30 @@ function displayScrapedData() {
 
 //Populate a dropdown with variation names
 function populateVariationDropdown(dropdownSelector) {
-    $('table.summary-table').each(function() {
-        var variationName = $(this).find('.variation-preview .ptitle').text().trim();
+    $('#report_condensed_table .summary-table-main td.variation .variationtxt').each(function() {
+        var variationName = $(this).text().trim();
 
         $(dropdownSelector).append('<option value="'+ variationName + '">' + variationName + '</option>');
     });
 }
 
-//Build the UI - temporary placeholder grabbed from CCROoverlay
+function CCROrenderAirtableInitialize() {
+    //Build the initialization pane - form to grab and store Airtable API Key and Airtable base ID in local storage
+    $('.CCROoverlayOptions').html('<form><div class="CCROformRow"><label for="CCROairtableAPIkey">Airtable API Key:</label> <input id="CCROairtableAPIkey"></div><div class="CCROformRow"><label for="CCROairtableBaseID">Airtable API Key:</label> <input id="CCROairtableBaseID"></div><div class="CCROformRow"><button class="CCROv-airtableAPI CCROv-button"><i class="fas fa-upload"></i>Set Airtable Data</button></div></form>');
+
+    $('.CCROv-airtableAPI').click(function(event) {
+        event.preventDefault();
+        
+        window.localStorage.setItem('CCROairtableAPIkey', $('#CCROairtableAPIkey').val() );
+
+        window.localStorage.setItem('CCROairtableBaseID', $('#CCROairtableBaseID').val() );
+    });
+}
+
 function CCROrenderScraper() {
-    $('head').append('<link rel="stylesheet" type="text/css" href="https://mjbeisch.github.io/ccro-bookmarklet/CCRObookmarklet.min.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">');
-    $("body").append('<div class="CCROoverlayui"><div class="CCROoverlayOptions"><label for="CCROcompletionStatusSelect">Completion status:</label> <select id="CCROcompletionStatusSelect"><option value="Neutral" selected>Neutral</option><option value="Win">Win</option><option value="Save">Save</option></select><label for="CCROwinningVariationSelect">Winning variation:</label> <select id="CCROwinningVariationSelect"></select><label for="CCROlosingVariationSelect">Losing variation:</label> <select id="CCROlosingVariationSelect"></select><label for="CCROstrongestVariationSelect">Strongest variation:</label> <select id="CCROstrongestVariationSelect"></select></div><div class="CCROoverlayuiscroll"><div class="CCROoverlayuicontent"><button class="CCROv-upload CCROv-button"><i class="fas fa-upload"></i>Upload to Airtable</button></div></div><div class="CCROv-header"><div class="CCROv-ui-buttons"><button class="CCROv-close CCROv-button"><i class="fas fa-times"></i></button></div><h2>Corvus CRO Experiment Overlay</h2></div></div>');
+    base = new Airtable({ apiKey: CCROairtableAPIkey }).base(CCROairtableBaseID);
+
+    $('.CCROoverlayOptions').html('<form><div class="CCROformRow"><label for="CCROcompletionStatusSelect">Completion status:</label> <select id="CCROcompletionStatusSelect"><option value="Neutral" selected>Neutral</option><option value="Win">Win</option><option value="Save">Save</option></select></div><div class="CCROformRow"><label for="CCROwinningVariationSelect">Winning variation:</label> <select id="CCROwinningVariationSelect"></select></div><div class="CCROformRow"><label for="CCROlosingVariationSelect">Losing variation:</label> <select id="CCROlosingVariationSelect"></select></div><div class="CCROformRow"><label for="CCROstrongestVariationSelect">Strongest variation:</label> <select id="CCROstrongestVariationSelect"></select></div><div class="CCROformRow"><button class="CCROv-upload CCROv-button"><i class="fas fa-upload"></i>Upload to Airtable</button></div></form>');
 
     //Populate the Variation Selects
     populateVariationDropdown('#CCROwinningVariationSelect');
