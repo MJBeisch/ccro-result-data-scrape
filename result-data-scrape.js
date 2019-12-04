@@ -37,7 +37,7 @@ function uploadResultData() {
         fetchNextPage();
     }, function done(error) {
         if(error) {
-            console.log('error='+error);
+            $('.CCROoverlayOptions').append('<p>Error: ' + error + '</p>');
 
             return;
         }
@@ -64,13 +64,13 @@ function uploadResultData() {
                 'Strongest Variation Revenue' : resultData['Strongest Variation Revenue']
             }, function(err, record) {
                 if (err) {
-                    console.log(err);
+                    $('.CCROoverlayOptions').append('<p>Error: ' + err + '</p>');
 
                     return;
                 }
 
                 else { 
-                    console.log('Test result data uploaded to Airtable.');
+                    $('.CCROoverlayOptions').append('<p>Success: Test result data uploaded to Airtable.</p>');
                 }
             });
         }
@@ -133,7 +133,7 @@ function CCROrenderAirtableInitialize() {
 
     $('.CCROv-airtableAPI').click(function(event) {
         event.preventDefault();
-        
+
         window.localStorage.setItem('CCROairtableAPIkey', $('#CCROairtableAPIkey').val() );
 
         window.localStorage.setItem('CCROairtableBaseID', $('#CCROairtableBaseID').val() );
