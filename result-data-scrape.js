@@ -2,7 +2,7 @@ var Airtable = '',
     base = '',
     CCROairtableAPIkey = window.localStorage.getItem('CCROairtableAPIkey'),
     CCROairtableBaseID = window.localStorage.getItem('CCROairtableBaseID'),
-    experimentName = $('.clabel').text().trim(),
+    experimentID = $('#experiment-test').val(),
     resultData = {};
 
 $.getScript('https://mjbeisch.github.io/ccro-result-data-scrape/airtable.browser.js', function() {
@@ -21,14 +21,14 @@ $.getScript('https://mjbeisch.github.io/ccro-result-data-scrape/airtable.browser
     }
 });
     
-//Get the Airtable record ID matching the experiment name
+//Get the Airtable record ID matching the experiment ID
 function uploadResultData() {
-    var experimentNameFilter = '{Experiment Name} = "'+ experimentName +'"',
+    var experimentIDFilter = '{Experiment ID} = "'+ experimentID +'"',
         recordID = '';
 
     base('All Split Test Data').select({
-        fields: ['Experiment Name'],
-        filterByFormula: experimentNameFilter
+        fields: ['Experiment ID'],
+        filterByFormula: experimentIDFilter
     }).eachPage(function page(records, fetchNextPage) {
         records.forEach(function(record) {
             recordID = record.id;
@@ -114,7 +114,7 @@ function displayScrapedData() {
     scrapeResultData( function() {
         $('.CCROoverlayDataUploadList').remove();
 
-        $('.CCROoverlayuicontent').append('<ul class="CCROoverlayDataUploadList"><li><strong>Experiment Name:</strong> ' + experimentName + '</li><li><strong>Conclusion Status:</strong> ' + resultData['Conclusion Status'] + '</li><li><strong>Winning Variation:</strong> ' + resultData['Winning Variation'] + '</li><li><strong>Losing Variation:</strong> ' + resultData['Losing Variation'] + '</li><li><strong>Baseline Variation Visitor Count:</strong> ' + resultData['Baseline Variation Visitor Count'] + '</li><li><strong>Strongest Variation Visitor Count:</strong> ' + resultData['Strongest Variation Visitor Count'] + '</li><li><strong>Total Visitor Count:</strong> ' + resultData['Total Visitor Count'] + '</li><li><strong>Baseline Variation Order Count:</strong> ' + resultData['Baseline Variation Order Count'] + '</li><li><strong>Strongest Variation Order Count:</strong> ' + resultData['Strongest Variation Order Count'] + '</li><li><strong>Baseline Variation Revenue:</strong> ' + resultData['Baseline Variation Revenue'] + '</li><li><strong>Strongest Variation Revenue:</strong> ' + resultData['Strongest Variation Revenue'] + '</li></ul>');
+        $('.CCROoverlayuicontent').append('<ul class="CCROoverlayDataUploadList"><li><strong>Experiment ID:</strong> ' + experimentID + '</li><li><strong>Conclusion Status:</strong> ' + resultData['Conclusion Status'] + '</li><li><strong>Winning Variation:</strong> ' + resultData['Winning Variation'] + '</li><li><strong>Losing Variation:</strong> ' + resultData['Losing Variation'] + '</li><li><strong>Baseline Variation Visitor Count:</strong> ' + resultData['Baseline Variation Visitor Count'] + '</li><li><strong>Strongest Variation Visitor Count:</strong> ' + resultData['Strongest Variation Visitor Count'] + '</li><li><strong>Total Visitor Count:</strong> ' + resultData['Total Visitor Count'] + '</li><li><strong>Baseline Variation Order Count:</strong> ' + resultData['Baseline Variation Order Count'] + '</li><li><strong>Strongest Variation Order Count:</strong> ' + resultData['Strongest Variation Order Count'] + '</li><li><strong>Baseline Variation Revenue:</strong> ' + resultData['Baseline Variation Revenue'] + '</li><li><strong>Strongest Variation Revenue:</strong> ' + resultData['Strongest Variation Revenue'] + '</li></ul>');
     });
 }
 
