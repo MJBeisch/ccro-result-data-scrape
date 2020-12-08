@@ -10,7 +10,7 @@ $.getScript('https://mjbeisch.github.io/ccro-result-data-scrape/airtable.browser
 
     //Build the CCRO Overlay UI frame - temporary placeholder grabbed from CCROoverlay
     $('head').append('<link rel="stylesheet" type="text/css" href="https://mjbeisch.github.io/ccro-bookmarklet/CCRObookmarklet.min.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">');
-    $("body").append('<div class="CCROoverlayui"><div class="CCROoverlayOptions"></div><div class="CCROoverlayuiscroll"><div class="CCROoverlayuicontent"></div></div><div class="CCROv-header"><div class="CCROv-ui-buttons"><button class="CCROv-close CCROv-button"><i class="fas fa-times"></i></button></div><h2>Corvus CRO Experiment Overlay</h2></div></div>');
+    $("body").append('<div class="CCROoverlayui"><div class="CCROoverlayOptions"></div><div class="CCROoverlayuiscroll"><div class="CCROoverlayuicontent"></div></div><div class="CCROv-header"><div class="CCROv-ui-buttons"><button type="button" class="CCROv-close CCROv-button"><i class="fas fa-times"></i></button></div><h2>Corvus CRO Experiment Overlay</h2></div></div>');
 
     if( !CCROairtableAPIkey || !CCROairtableBaseID ) {
         CCROrenderAirtableInitialize();
@@ -129,7 +129,7 @@ function populateVariationDropdown(dropdownSelector) {
 
 function CCROrenderAirtableInitialize() {
     //Build the initialization pane - form to grab and store Airtable API Key and Airtable base ID in local storage
-    $('.CCROoverlayOptions').html('<form><div class="CCROformRow"><label for="CCROairtableAPIkey">Airtable API Key:</label> <input id="CCROairtableAPIkey"></div><div class="CCROformRow"><label for="CCROairtableBaseID">Airtable API Key:</label> <input id="CCROairtableBaseID"></div><div class="CCROformRow"><button class="CCROv-airtableAPI CCROv-button"><i class="fas fa-upload"></i>Set Airtable Data</button></div></form>');
+    $('.CCROoverlayOptions').html('<form><div class="CCROformRow"><label for="CCROairtableAPIkey">Airtable API Key:</label> <input id="CCROairtableAPIkey"></div><div class="CCROformRow"><label for="CCROairtableBaseID">Airtable API Key:</label> <input id="CCROairtableBaseID"></div><div class="CCROformRow"><button type="button" class="CCROv-airtableAPI CCROv-button"><i class="fas fa-upload"></i>Set Airtable Data</button></div></form>');
 
     $('.CCROv-airtableAPI').click(function(event) {
         event.preventDefault();
@@ -143,7 +143,7 @@ function CCROrenderAirtableInitialize() {
 function CCROrenderScraper() {
     base = new Airtable({ apiKey: CCROairtableAPIkey }).base(CCROairtableBaseID);
 
-    $('.CCROoverlayOptions').html('<form><div class="CCROformRow"><label for="CCROcompletionStatusSelect">Completion status:</label> <select id="CCROcompletionStatusSelect"><option value="Neutral" selected>Neutral</option><option value="Win">Win</option><option value="Save">Save</option></select></div><div class="CCROformRow"><label for="CCROwinningVariationSelect">Winning variation:</label> <select id="CCROwinningVariationSelect"></select></div><div class="CCROformRow"><label for="CCROlosingVariationSelect">Losing variation:</label> <select id="CCROlosingVariationSelect"></select></div><div class="CCROformRow"><label for="CCROstrongestVariationSelect">Strongest variation:</label> <select id="CCROstrongestVariationSelect"></select></div><div class="CCROformRow"><button class="CCROv-upload CCROv-button"><i class="fas fa-upload"></i>Upload to Airtable</button></div></form>');
+    $('.CCROoverlayOptions').html('<form><div class="CCROformRow"><label for="CCROcompletionStatusSelect">Completion status:</label> <select id="CCROcompletionStatusSelect"><option value="Neutral" selected>Neutral</option><option value="Win">Win</option><option value="Save">Save</option></select></div><div class="CCROformRow"><label for="CCROwinningVariationSelect">Winning variation:</label> <select id="CCROwinningVariationSelect"></select></div><div class="CCROformRow"><label for="CCROlosingVariationSelect">Losing variation:</label> <select id="CCROlosingVariationSelect"></select></div><div class="CCROformRow"><label for="CCROstrongestVariationSelect">Strongest variation:</label> <select id="CCROstrongestVariationSelect"></select></div><div class="CCROformRow"><button type="button" class="CCROv-upload CCROv-button"><i class="fas fa-upload"></i>Upload to Airtable</button></div></form>');
 
     //Populate the Variation Selects
     populateVariationDropdown('#CCROwinningVariationSelect');
